@@ -1,5 +1,6 @@
 const graphql = require('graphql');
 const _ = require('lodash');
+const Todo = require('../models/todos');
 
 
 //de-structure to get var from graphql
@@ -20,6 +21,28 @@ const TodoType = new GraphQLObjectType({
   })
 });
 
+const Mutation = new GraphQLObjectType({
+  name: "Mutations",
+  fields: {
+    addTodo: {
+      type: TodoType,
+      args: {
+        name: { type: GraphQLString },
+        details: { type: GraphQLString }
+      },
+      resolve(parent, args) {
+        let todo = new Todo({
+          name: args.name,
+          details: args.details
+        });
+        return todo.save();
+      }
+    }
+  }
+});
+
+
+
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
@@ -28,14 +51,15 @@ const RootQuery = new GraphQLObjectType({
       args: {
         id: { type: GraphQLID }
       },
-      resolve(parent, args) {
-        //get data from DB
-        return _.find(todos, { id: args.id })
-      }
+
+      //resolve
     }
   }
 });
 
+
+
 module.exports = new GraphQLSchema({
-  query: RootQuery
+  query: RootQuery,
+  mutation: Mutation
 });
