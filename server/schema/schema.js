@@ -10,13 +10,6 @@ const {
   GraphQLID,
 } = graphql
 
-//dummy data
-var todos = [
-  { name: 'walk the dog', details: '30 minute walk', id: '1' },
-  { name: 'make dinner', details: 'spaghetti', id: '2' },
-  { name: 'wash the car', details: 'suds it up', id: '3' },
-];
-
 //define new type
 const TodoType = new GraphQLObjectType({
   name: 'Todo',
